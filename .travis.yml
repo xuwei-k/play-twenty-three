@@ -1,0 +1,8 @@
+language: scala
+
+jdk:
+  - oraclejdk7
+  - oraclejdk8
+
+script: sbt -Dheartbeat=true checkGenerate test last
+
