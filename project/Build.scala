@@ -29,7 +29,7 @@ object Generate extends Build {
   ).getOrElse("master")
 
   val commonSettins = Seq(
-    scalaVersion := "2.11.2",
+    scalaVersion := "2.11.3",
     crossScalaVersions := scalaVersion.value :: Nil,
     scalacOptions ++= (
       "-language:postfixOps" ::
