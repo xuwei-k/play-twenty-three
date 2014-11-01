@@ -1,10 +1,5 @@
 package play.twentythree
 
-import java.io.File
-import java.nio.file.Files
-import java.nio.charset.Charset
-import java.util.Collections.singletonList
-
 object Param {
   def params(range: Iterable[Int]): Map[Int, Param] =
     range.map { n =>
