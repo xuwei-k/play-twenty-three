@@ -29,7 +29,7 @@ object Generate extends Build {
   ).getOrElse("master")
 
   val commonSettins = Seq(
-    scalaVersion := "2.11.2",
+    scalaVersion := "2.11.4",
     crossScalaVersions := scalaVersion.value :: Nil,
     scalacOptions ++= (
       "-language:postfixOps" ::
@@ -154,7 +154,7 @@ object Generate extends Build {
     resolvers += "typesafe" at "http://typesafe.artifactoryonline.com/typesafe/releases/",
     libraryDependencies ++= (
       ("com.typesafe.play" %% "play-json" % "2.3.2" % "provided") ::
-      ("org.scalacheck" %% "scalacheck" % "1.11.4" % "test") ::
+      ("org.scalacheck" %% "scalacheck" % "1.11.6" % "test") ::
       ("com.chuusai" %% "shapeless" % "2.0.0") ::
       Nil
     ),
