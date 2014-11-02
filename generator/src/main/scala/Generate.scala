@@ -103,7 +103,7 @@ ${p.applyMethods.map(method0).mkString("\n")}
 
   val max: Int = setting.params.map(_._1).reduceOption(_ max _).getOrElse(0)
 
-s"""package play.twentythree
+s"""package ${setting.packageName}
 
 import play.api.libs.json.{JsPath, Format, Reads, Writes, OFormat, OWrites, JsResult, KeyPathNode}
 import shapeless.{HNil, HList, ::, Generic}
