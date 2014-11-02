@@ -2,8 +2,13 @@
 > compile
 > set TwentyThreeKeys.twentyThreeSetting ~= {s => s.copy(params = s.params.mapValues(p => p.copy(_reads = None)))}
 > compile
-> set TwentyThreeKeys.twentyThreeSetting ~= {s => s.copy(params = s.params.mapValues(p => p.copy(format = None)))}
+> set TwentyThreeKeys.twentyThreeSetting ~= {s => s.copy(params = s.params.mapValues(p => p.copy(formatFast = None)))}
 -> compile
+
 > reload
 > set TwentyThreeKeys.twentyThreeSetting := play.twentythree.Settings.get(24 :: Nil)
 -> compile
+
+> reload
+> set TwentyThreeKeys.twentyThreeSetting ~= {_.enableAll}
+> compile

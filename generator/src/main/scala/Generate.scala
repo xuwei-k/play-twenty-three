@@ -41,6 +41,8 @@ object Generate {
   }
 
   def code(setting: Settings): String = {
+    setting.validate.foreach(sys.error)
+
     val method: Tuple2[Int, Param] => String = {
       case (n, param) =>
 
@@ -55,8 +57,7 @@ object Generate {
         def paramList(class1: String, class2: String) =
           s"""[${tparams(n).mkString(", ")}, Z](f: Generic[Z]{ type Repr = ${(tparams(n) :+ "HNil").mkString(" :: ")} })(implicit ${tparams(n).map(t => s"${t}: ${class1}[${t}]").mkString(", ")}): ${class2}[Z] ="""
 
-        def read(readMethodName: String) = s"""
-    def $readMethodName${paramList("Reads", "Reads")}
+        def read(readMethodName: String) = s"""    def $readMethodName${paramList("Reads", "Reads")}
       Reads[Z]( j =>
         sequence$n[${tparams(n).mkString(", ")}](${
           (
@@ -65,22 +66,28 @@ object Generate {
         }).map(f.from)
       )"""
 
-        def write(writeMethodName: String) = s"""
-    def $writeMethodName${paramList("Writes", "OWrites")}
+        def write(writeMethodName: String, mergeMethod: MergeStrategy) =s"""    def $writeMethodName${paramList("Writes", "OWrites")}
       OWrites[Z]{ z =>
         val _0 = f.to(z)
         ${(1 until n).map(x => s"val _$x = _${x - 1}.tail").mkString("; ")}
         ${tparams(n).zip(params(n)).zipWithIndex.map { case ((t, k), i) =>
-          s"(JsPath.createObj((JsPath \\ $k) -> $t.writes(_${i}.head)))"
-        }.mkString(".deepMerge")}
+          s"(JsObject(($k -> $t.writes(_${i}.head)) :: Nil))"
+        }.mkString("." + mergeMethod.name)}
       }"""
 
+         def writeFast(writeMethodName: String) = s"""    def $writeMethodName${paramList("Writes", "OWrites")}
+      OWrites[Z]{ z =>
+        val _0 = f.to(z)
+        ${(1 until n).map(x => s"val _$x = _${x - 1}.tail").mkString("; ")}
+        ${tparams(n).zip(params(n)).zipWithIndex.map{
+          case ((t, k), i) => s"(($k,$t.writes(_${i}.head)))"
+        }.reverse.mkString("JsObject(Nil.::", ".::", ")")}
+      }"""
 
-        def format(formatMethodName: String) = s"""
-    def $formatMethodName${paramList("Format", "OFormat")}
+        def format(formatMethodName: String, writesMethodName: String) = s"""    def $formatMethodName${paramList("Format", "OFormat")}
       OFormat(
         ${param.reads.get}(f)(${tparams(n).mkString(", ")}),
-        ${param.writes.get}(f)(${tparams(n).mkString(", ")})
+        ${writesMethodName}(f)(${tparams(n).mkString(", ")})
       )"""
 
         Option(param).filterNot(_.isEmpty) match {
@@ -89,9 +96,13 @@ object Generate {
 ${p.applyMethods.map(method0).mkString("\n")}
 
   ${p.clazz.str(setting.objectName)}(${params(n).map(_ + ": String").mkString(", ")}) {
-    ${p.reads.fold("")(read)}
-    ${p.writes.fold("")(write)}
-    ${p.format.fold("")(format)}
+${p.reads.fold("")(read)}
+${p.writesDeep.fold("")(write(_, MergeStrategy.Deep))}
+${p.writesPlus.fold("")(write(_, MergeStrategy.Plus))}
+${p.writesFast.fold("")(writeFast(_))}
+${p.formatDeep.fold("")(format(_, p.writesDeep.get))}
+${p.formatPlus.fold("")(format(_, p.writesPlus.get))}
+${p.formatFast.fold("")(format(_, p.writesFast.get))}
   }"""
           case None => ""
         }
@@ -105,7 +116,7 @@ ${p.applyMethods.map(method0).mkString("\n")}
 
 s"""package ${setting.packageName}
 
-import play.api.libs.json.{JsPath, Format, Reads, Writes, OFormat, OWrites, JsResult, KeyPathNode}
+import play.api.libs.json.{JsPath, Format, Reads, Writes, OFormat, OWrites, JsResult, KeyPathNode, JsObject}
 import shapeless.{HNil, HList, ::, Generic}
 
 object ${setting.objectName} {
