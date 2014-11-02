@@ -29,9 +29,11 @@ object Generate {
   }
 
   private def generateMain(dir: File): Unit = {
-    val f = new File(dir, defaultObjectName + ".scala").toPath
     val source = code(Settings(defaultPackageName, defaultObjectName, Param.params(1 to 252)))
-    Files.write(f, singletonList(source), charSet)
+    source.foreach{ case (a, b) =>
+      val f = new File(dir, a + ".scala").toPath
+      Files.write(f, singletonList(b), charSet)
+    }
   }
 
   private def generateSequencer(dir: File): Unit = {
@@ -40,14 +42,14 @@ object Generate {
     Files.write(f, singletonList(GenSequencer.gen(defaultPackageName)), charSet)
   }
 
-  def code(setting: Settings): String = {
+  private def tparams(n: Int): Seq[String] = (1 to n).map("k" + _)
+  private def params(n: Int): Seq[String] = (1 to n).map("A" + _)
+
+  def code(setting: Settings): Map[String, String] = {
     setting.validate.foreach(sys.error)
 
     val method: Tuple2[Int, Param] => String = {
       case (n, param) =>
-
-        def tparams(n: Int): Seq[String] = (1 to n).map(param.tparamName)
-        def params(n: Int): Seq[String] = (1 to n).map(param.paramName)
 
         val builder: String = param.clazz.name
         def method0(methodName: String) = s"""
@@ -92,8 +94,13 @@ object Generate {
 
         Option(param).filterNot(_.isEmpty) match {
           case Some(p) =>
-            s"""
-${p.applyMethods.map(method0).mkString("\n")}
+            s"""package ${setting.packageName}
+
+import play.api.libs.json.{JsPath, Format, Reads, Writes, OFormat, OWrites, JsResult, KeyPathNode, JsObject}
+import shapeless.{HNil, HList, ::, Generic}
+import PlayJson._
+import Sequencer._
+
 
   ${p.clazz.str(setting.objectName)}(${params(n).map(_ + ": String").mkString(", ")}) {
 ${p.reads.fold("")(read)}
@@ -114,19 +121,26 @@ ${p.formatFast.fold("")(format(_, p.writesFast.get))}
 
   val max: Int = setting.params.map(_._1).reduceOption(_ max _).getOrElse(0)
 
+  val main =
 s"""package ${setting.packageName}
 
-import play.api.libs.json.{JsPath, Format, Reads, Writes, OFormat, OWrites, JsResult, KeyPathNode, JsObject}
-import shapeless.{HNil, HList, ::, Generic}
+import play.api.libs.json.{JsResult}
+import shapeless.{HNil, ::}
 
 object ${setting.objectName} {
   import Sequencer.sequence1
 
   ${(2 to max).map(Sequencer.apply).mkString("\n")}
 
-  ${range.map(method).mkString("\n")}
+  ${range.map{case (n, x) => x.applyMethods.map{ methodName =>
+s"""def ${methodName}(${params(n).map(_ + ": String").mkString(", ")}): Builder$n = new Builder$n(${params(n).mkString(", ")})"""
+  }.mkString("\n  ")}.mkString("\n")}
+
 }
 """
+
+    (range.map{case x @ (i, p) => ("Builder" + i.toString()) -> method(x)}(collection.breakOut): Map[String, String]) + ("PlayJson" -> main)
+
   }
 
 }

@@ -18,7 +18,7 @@ object Plugin extends sbt.Plugin {
     twentyThreeGen := twentyThreeGen.?.value.getOrElse{
       val setting = twentyThreeSetting.value
       Map(
-        setting.objectName + ".scala" -> Generate.code(setting),
+        setting.objectName + ".scala" -> "",
         "Sequencer.scala" -> GenSequencer.gen(setting.packageName)
       )
     },

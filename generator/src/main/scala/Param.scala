@@ -15,7 +15,7 @@ object Param {
   def param(applyMethods: List[String], className: String): Param =
     Param(
       applyMethods = applyMethods,
-      clazz = Clazz(className, true, false, true),
+      clazz = Clazz(className, true, true, false),
       _reads = Some(Defaults.ReadsMethod),
       _writesDeep = None,
       _writesPlus = None,
