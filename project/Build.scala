@@ -152,6 +152,8 @@ object build extends Build {
     state
   }
 
+  private final val Scala211 = "2.11.5"
+
   lazy val root = Project(
     "root", file(".")
   ).settings(
@@ -177,7 +179,7 @@ object build extends Build {
     buildInfoObject := "TwentyThreeGeneratorBuildInfo",
     name := generatorModuleName,
     scalaVersion := "2.10.4",
-    crossScalaVersions := "2.11.4" :: scalaVersion.value :: Nil,
+    crossScalaVersions := Scala211 :: scalaVersion.value :: Nil,
     generateSources := {
       val dir = (generatedSourceDirBase.value / generatedSourceDir).toString
       val cp = (fullClasspath in Compile).value
@@ -215,9 +217,9 @@ object build extends Build {
     name := mainModuleName,
     sourceGenerators in Compile <+= buildInfo,
     buildInfoObject := "TwentyThreeBuildInfo",
-    scalaVersion := "2.11.4",
+    scalaVersion := Scala211,
     onLoadMessage := {
-      assert(scalaVersion.value == "2.11.4")
+      assert(scalaVersion.value == Scala211)
       onLoadMessage.value
     },
     resolvers += "typesafe" at "http://typesafe.artifactoryonline.com/typesafe/releases/",
