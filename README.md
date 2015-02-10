@@ -12,11 +12,11 @@
 #### library
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %% "play-twenty-three" % "0.1.2"
+libraryDependencies += "com.github.xuwei-k" %% "play-twenty-three" % "0.1.3"
 ```
 
 #### sbt plugin
 
 ```scala
-addSbtPlugin("com.github.xuwei-k" %% "play-twenty-three-plugin" % "0.1.2")
+addSbtPlugin("com.github.xuwei-k" %% "play-twenty-three-plugin" % "0.1.3")
 ```
