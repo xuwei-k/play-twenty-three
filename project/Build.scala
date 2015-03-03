@@ -152,7 +152,7 @@ object build extends Build {
     state
   }
 
-  private final val Scala211 = "2.11.5"
+  private final val Scala211 = "2.11.6"
 
   lazy val root = Project(
     "root", file(".")
