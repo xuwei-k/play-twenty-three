@@ -51,7 +51,7 @@ object build extends Build {
       "-Xlint" ::
       Nil
     ),
-    scalacOptions ++= (
+    scalacOptions in compile ++= (
       if (scalaVersion.value.startsWith("2.11")) {
         "-Ywarn-unused" ::
         "-Ywarn-unused-import" ::
