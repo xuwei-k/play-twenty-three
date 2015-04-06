@@ -225,7 +225,7 @@ object build extends Build {
     resolvers += "typesafe" at "http://typesafe.artifactoryonline.com/typesafe/releases/",
     libraryDependencies ++= (
       ("com.typesafe.play" %% "play-json" % "2.3.6" % "provided") ::
-      ("org.scalacheck" %% "scalacheck" % "1.11.6" % "test") ::
+      ("org.scalacheck" %% "scalacheck" % "1.12.2" % "test") ::
       ("com.chuusai" %% "shapeless" % "2.1.0") ::
       Nil
     ),
