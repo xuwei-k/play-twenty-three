@@ -29,7 +29,7 @@ object build extends Build {
     sys.process.Process("git rev-parse HEAD").lines_!.head
   ).getOrElse("master")
 
-  private val commonSettings = ReleasePlugin.releaseSettings ++ ReleasePlugin.extraReleaseCommands ++ sonatypeSettings ++ buildInfoSettings ++ Seq(
+  private val commonSettings = ReleasePlugin.extraReleaseCommands ++ sonatypeSettings ++ buildInfoSettings ++ Seq(
     description := "generate over twenty three case classes play-json Reads/Writes/Format",
     buildInfoPackage := "play.twentythree",
     buildInfoKeys := Seq[BuildInfoKey](
