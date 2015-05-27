@@ -7,7 +7,7 @@ final case class Foo(
   _01: String,
   _02: List[Int],
   _03: Int,
-  _04: Option[Long],
+  _04: Long,
   _05: Int,
   _06: Boolean,
   _07: String,
@@ -15,7 +15,7 @@ final case class Foo(
   _09: Int,
   _10: List[Int],
   _11: Int,
-  _12: Option[Long],
+  _12: Long,
   _13: Int,
   _14: Boolean,
   _15: String,
@@ -28,7 +28,7 @@ final case class Foo(
   _22: String,
   _23: Int,
   _24: Int,
-  _25: Option[Long]
+  _25: Long
 )
 
 object Foo {
