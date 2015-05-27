@@ -222,9 +222,8 @@ object build extends Build {
       assert(scalaVersion.value == Scala211)
       onLoadMessage.value
     },
-    resolvers += "typesafe" at "http://typesafe.artifactoryonline.com/typesafe/releases/",
     libraryDependencies ++= (
-      ("com.typesafe.play" %% "play-json" % "2.3.6" % "provided") ::
+      ("com.typesafe.play" %% "play-json" % "2.3.9" % "provided") ::
       ("org.scalacheck" %% "scalacheck" % "1.12.2" % "test") ::
       ("com.chuusai" %% "shapeless" % "2.1.0") ::
       Nil
