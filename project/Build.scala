@@ -223,7 +223,7 @@ object build extends Build {
       onLoadMessage.value
     },
     libraryDependencies ++= (
-      ("com.typesafe.play" %% "play-json" % "2.3.9" % "provided") ::
+      ("com.typesafe.play" %% "play-json" % "2.4.0" % "provided") ::
       ("org.scalacheck" %% "scalacheck" % "1.12.2" % "test") ::
       ("com.chuusai" %% "shapeless" % "2.1.0") ::
       Nil
