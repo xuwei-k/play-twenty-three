@@ -225,7 +225,7 @@ object build extends Build {
     libraryDependencies ++= (
       ("com.typesafe.play" %% "play-json" % "2.4.0" % "provided") ::
       ("org.scalacheck" %% "scalacheck" % "1.12.2" % "test") ::
-      ("com.chuusai" %% "shapeless" % "2.1.0") ::
+      ("com.chuusai" %% "shapeless" % "2.2.0") ::
       Nil
     ),
     packageSrc in Compile <<= (packageSrc in Compile).dependsOn(compile in Compile),
