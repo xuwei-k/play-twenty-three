@@ -153,7 +153,7 @@ object build extends Build {
     state
   }
 
-  private final val Scala211 = "2.11.6"
+  private final val Scala211 = "2.11.7"
 
   lazy val root = Project(
     "root", file(".")
@@ -170,6 +170,8 @@ object build extends Build {
     publishLocal := {}
   ).aggregate(generator, playTwentyThree, plugin)
 
+  private val Scala210 = "2.10.6"
+
   // https://groups.google.com/d/topic/simple-build-tool/_bBUQk4dIAE/discussion
   lazy val generator = Project(
     "generator", file("generator")
@@ -179,7 +181,7 @@ object build extends Build {
     sourceGenerators in Compile <+= buildInfo,
     buildInfoObject := "TwentyThreeGeneratorBuildInfo",
     name := generatorModuleName,
-    scalaVersion := "2.10.5",
+    scalaVersion := Scala210,
     crossScalaVersions := Scala211 :: scalaVersion.value :: Nil,
     generateSources := {
       val dir = (generatedSourceDirBase.value / generatedSourceDir).toString
@@ -197,7 +199,7 @@ object build extends Build {
     commonSettings ++ ScriptedPlugin.scriptedSettings : _*
   ).settings(
     sbtPlugin := true,
-    scalaVersion := "2.10.5",
+    scalaVersion := Scala210,
     name := pluginModuleName,
     ScriptedPlugin.scriptedBufferLog := false,
     ScriptedPlugin.scriptedLaunchOpts ++= sys.process.javaVmArguments.filter(
@@ -205,7 +207,7 @@ object build extends Build {
     ),
     ScriptedPlugin.scriptedLaunchOpts += ("-Dplugin.version=" + version.value),
     onLoadMessage := {
-      assert(scalaVersion.value == "2.10.5")
+      assert(scalaVersion.value == Scala210)
       onLoadMessage.value
     }
   ).dependsOn(generator)
@@ -224,9 +226,9 @@ object build extends Build {
       onLoadMessage.value
     },
     libraryDependencies ++= (
-      ("com.typesafe.play" %% "play-json" % "2.4.0" % "provided") ::
-      ("org.scalacheck" %% "scalacheck" % "1.12.2" % "test") ::
-      ("com.chuusai" %% "shapeless" % "2.2.0") ::
+      ("com.typesafe.play" %% "play-json" % "2.4.4" % "provided") ::
+      ("org.scalacheck" %% "scalacheck" % "1.12.5" % "test") ::
+      ("com.chuusai" %% "shapeless" % "2.2.5") ::
       Nil
     ),
     packageSrc in Compile <<= (packageSrc in Compile).dependsOn(compile in Compile),

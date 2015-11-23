@@ -33,8 +33,8 @@ object Plugin extends sbt.Plugin {
   )
 
   val twentyThreeSettings: Seq[Def.Setting[_]] = Seq(
-    twentyThreePlay := twentyThreePlay.?.value.getOrElse("2.4.0"),
-    twentyThreeShapeless := twentyThreeShapeless.?.value.getOrElse("2.2.0"),
+    twentyThreePlay := twentyThreePlay.?.value.getOrElse("2.4.4"),
+    twentyThreeShapeless := twentyThreeShapeless.?.value.getOrElse("2.2.5"),
     libraryDependencies ++= (
       ("com.typesafe.play" %% "play-json" % twentyThreePlay.value) ::
       ("com.chuusai" %% "shapeless" % twentyThreeShapeless.value) ::
