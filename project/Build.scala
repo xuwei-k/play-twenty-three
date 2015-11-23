@@ -30,6 +30,7 @@ object build extends Build {
   ).getOrElse("master")
 
   private val commonSettings = ReleasePlugin.extraReleaseCommands ++ sonatypeSettings ++ buildInfoSettings ++ Seq(
+    fullResolvers ~= {_.filterNot(_.name == "jcenter")},
     description := "generate over twenty three case classes play-json Reads/Writes/Format",
     buildInfoPackage := "play.twentythree",
     buildInfoKeys := Seq[BuildInfoKey](

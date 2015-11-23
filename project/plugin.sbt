@@ -18,3 +18,5 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "0.4.0")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.3.2")
 
 libraryDependencies += "org.scala-sbt" % "scripted-plugin" % sbtVersion.value
+
+fullResolvers ~= {_.filterNot(_.name == "jcenter")}
