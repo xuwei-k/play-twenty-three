@@ -154,6 +154,7 @@ object build extends Build {
   }
 
   private final val Scala211 = "2.11.8"
+  private final val Scala210 = "2.10.6"
 
   lazy val root = Project(
     "root", file(".")
@@ -179,7 +180,7 @@ object build extends Build {
     sourceGenerators in Compile <+= buildInfo,
     buildInfoObject := "TwentyThreeGeneratorBuildInfo",
     name := generatorModuleName,
-    scalaVersion := "2.10.5",
+    scalaVersion := Scala210,
     crossScalaVersions := Scala211 :: scalaVersion.value :: Nil,
     generateSources := {
       val dir = (generatedSourceDirBase.value / generatedSourceDir).toString
@@ -197,7 +198,7 @@ object build extends Build {
     commonSettings ++ ScriptedPlugin.scriptedSettings : _*
   ).settings(
     sbtPlugin := true,
-    scalaVersion := "2.10.5",
+    scalaVersion := Scala210,
     name := pluginModuleName,
     ScriptedPlugin.scriptedBufferLog := false,
     ScriptedPlugin.scriptedLaunchOpts ++= sys.process.javaVmArguments.filter(
@@ -205,7 +206,7 @@ object build extends Build {
     ),
     ScriptedPlugin.scriptedLaunchOpts += ("-Dplugin.version=" + version.value),
     onLoadMessage := {
-      assert(scalaVersion.value == "2.10.5")
+      assert(scalaVersion.value == Scala210)
       onLoadMessage.value
     }
   ).dependsOn(generator)
