@@ -6,10 +6,4 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./scripted.sh && sbt -Dheartbeat=true checkGenerate "project /" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
-
-env:
-  global:
-    - secure: "veROB4RsEVR1/MmTfUUsFz80lH4I9MrgnregVpBp2+1234+D5DawaR3mYMPDggB8Obk0/4HMS1LR+HHtRW49QuYOnufqdH4MJ1qxiTjcjSVaGqNmof2rM0uW6jHwoQ5nFbBjOngUNM6zVER6Rs5MVhjm9VQbNpQ5VTbuEEXXT04="
-    - secure: "efTxU1a7+zO0VQ/f/XGSuzeiZy0CK/14DFdCDnr/87OC5vFSlUbzViKChgASnLlTjtjhFmbFz4fdzPIizO4Soc1ui7L1hf3SenQ+ChvOA9P9FYmMAVOnMaZGn+TStIat6qo3lnLYvwdQLSUXAT2nNLo0H2ZBkYmCQYJ4BRAlb3w="
-
+  - ./scripted.sh && sbt -Dheartbeat=true checkGenerate "project /" test
